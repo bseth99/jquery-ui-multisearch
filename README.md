@@ -23,6 +23,6 @@ behind the design on my blog post -
 
 ## License
 
-Copyright (c) 2013 Ben Olson
+Copyright (c) 2013 Ben Olson  
 Licensed under the MIT License
 
