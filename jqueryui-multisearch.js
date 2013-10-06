@@ -275,7 +275,7 @@
          if ( arguments.length === 0 ) {
 
             // Clear
-            this.$itemList.children().not( this.$input ).remove();
+            this._getSelectedChildren().remove();
             this.itemData = [];
             this.itemIndex = -1;
          } else if ( _.isObject( item ) ) {
@@ -440,6 +440,12 @@
          this._initAutoWidth();
          this._initRemote();
 
+         var self = this;
+         $( document ).on( 'click.multisearch', function( event ) {
+
+            if ( self.element.has( event.target ).length === 0 )
+               self._hidePicker();
+         });
       },
 
       _initRemote: function() {
@@ -467,17 +473,21 @@
 
             this._remoteSearch = _.throttle( function() {
 
-               if ( self._xhr )
-                  self._xhr.abort();
+                  if ( self.localCache[self.search_text] ) {
+                     cb( self.search_text, self.localCache[self.search_text] );
+                  } else {
 
-               self._xhr =
-                  $.ajax({
-                     url: opt.source,
-                     data: opt.ajaxOptions.searchTerm+'='+self.search_text,
-                     dataType: opt.ajaxOptions.dataType,
-                     method: opt.ajaxOptions.method
-                  }).done( _.partial( cb, self.search_text ) );
+                     if ( self._xhr )
+                        self._xhr.abort();
 
+                     self._xhr =
+                        $.ajax({
+                           url: opt.source,
+                           data: opt.ajaxOptions.searchTerm+'='+self.search_text,
+                           dataType: opt.ajaxOptions.dataType,
+                           method: opt.ajaxOptions.method
+                        }).done( _.partial( cb, self.search_text ) );
+                  }
                },
                opt.searchThrottle,
                { leading: false }
@@ -488,7 +498,11 @@
             this._remoteSearch = _.throttle( function() {
 
                   // Need to capture the text as of now..
-                  opt.source.call( self, self.search_text, _.partial( cb, self.search_text ) );
+                  if ( self.localCache[self.search_text] ) {
+                     cb( self.search_text, self.localCache[self.search_text] );
+                  } else {
+                     opt.source.call( self, self.search_text, _.partial( cb, self.search_text ) );
+                  }
                },
                opt.searchThrottle,
                { leading: false }
@@ -543,9 +557,15 @@
 
          this.element.removeClass( 'osb-multisearch' );
 
+         $( document ).off( 'click.multisearch' );
          this.$input.off( 'keydown keyup' );
          this.$picker.off( 'click mouseenter mouseleave' );
          this.$itemList.off( 'click mouseenter mouseleave keydown' );
+
+         this.$sizer.remove();
+         this.$pickerList.html('');
+         this._getSelectedChildren().remove();
+         this.$picker.show();
 
          this._remoteSearch = null;
 
@@ -652,7 +672,7 @@
                      this._addSelectedItem();
                   } else {
 
-                     if ( !this.preventNotFound ) {
+                     if ( !this.options.preventNotFound ) {
                         this._addItem( this.options.buildNewItem( this.search_text ) );
                      }
                   }
@@ -967,7 +987,10 @@
 
          var self = this;
 
+         // I guess this means nothing else can be
+         // placed in here ...
          this.$pickerList.html('');
+         this.optionIndex = -1;
 
          if ( this.optionData.length > 0 ) {
 
@@ -976,6 +999,12 @@
             });
 
             this._showPicker();
+
+            if ( this.options.preventNotFound ) {
+               this.optionIndex = 0;
+               this._overPickerItem( this._getPickerChildren().eq( 0 ) );
+            }
+
 
          } else {
             this._hidePicker();
@@ -1032,6 +1061,10 @@
 
                if ( item[d] && self.options.localMatcher( text, item[d] ) ) {
 
+                  // TODO: Figure out how to allow this to be overridden.
+                  // as it stands now, this will find substrings that
+                  // might not match what localMatcher thought should
+                  // match...
                   item[d] = item[d].replace(
                                        new RegExp(
                                            '(?![^&;]+;)(?!<[^<>]*)(' +
@@ -1070,17 +1103,12 @@
          if ( this.search_text.length < this.options.minSearchChars ) return;
 
          search = search.length > 1 ? search.slice( 0, search.length - 1 ) : null;
-         if ( search && this.localCache[search] && this.localCache[search].length < this.options.minLocalCache ) {
+         if ( search && this.localCache[search] && this.localCache[search].length <= this.options.minLocalCache ) {
 
             cache = _.filter( this.localCache[search], function ( item ) { return self._matcher.call( self, item ); });
 
             this.localCache[this.search_text] = cache;
             this.optionData = cache.slice( 0, this.options.maxShowOptions );
-            this._renderPickerItems();
-
-         } else if ( this.localCache[this.search_text] ) {
-
-            this.optionData = this.localCache[this.search_text].slice( 0, this.options.maxShowOptions );
             this._renderPickerItems();
 
          } else {
