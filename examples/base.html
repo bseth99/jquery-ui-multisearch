@@ -1,0 +1,317 @@
+<!Doctype html>
+<html lang="en">
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>jQueryUI MultiSearch - Basic Styling Demo</title>
+
+   <script src="http://code.jquery.com/jquery.min.js"></script>
+   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+   <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.1.0/lodash.underscore.min.js"></script>
+   <script src="../src/jqueryui-multisearch.js"></script>
+
+
+</head>
+<body>
+
+<style>
+
+.styled ul {
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+.styled li {
+   margin: 0;
+   padding: 0;
+}
+
+.styled a {
+   color: black;
+   margin: 3px;
+}
+
+.styled a:hover, .styled a.hover, .styled li.hover a {
+   color: green;
+}
+
+.styled .picker {
+   border: 1px solid silver;
+   padding: 10px;
+}
+</style>
+
+<div style="width: 600px; margin: auto; ">
+
+   <br/><br/>
+   <div>
+      <a href="../index.html">&lt; Back to home</a> |
+      <a href="https://github.com/bseth99/jqueryui-multisearch/blob/master/examples/base.html">View Source</a>
+   </div>
+
+   <br/>
+   This is a very simple example using all the defaults and a local data source.
+   Sticking with the theme of the quick demo, the source is the top 200 baby names
+   from 2012.  This page loaded with no styles applied to the widgets content.
+   You can see how there's no visual cues when hovering or selecting items and
+   how the selected list runs together.  Toggle the styles to see the difference.
+
+   <br/><br/>
+   <button>Toggle Styles</button>
+
+   <br/><br/>
+   <div id="myMultiSearch">
+      <div data-role="selected-list">
+         <input data-role="input" type="text" placeholder="Search..."/>
+      </div>
+
+      <div data-role="picker" class="picker">
+         <ul class="list-group" data-role="picker-list">
+         </ul>
+      </div>
+   </div>
+
+</div>
+
+<br/><br/>
+<br/><br/>
+<br/><br/>
+<br/><br/>
+
+
+<script>
+
+$(function() {
+
+   $("#myMultiSearch").multisearch({
+      source: babyNames,
+   });
+
+   $( 'button' ).click(function() {
+
+      $("#myMultiSearch").toggleClass( 'styled' );
+   });
+});
+
+var babyNames = [
+   { name: 'Aaliyah' },
+   { name: 'Aaron' },
+   { name: 'Abigail' },
+   { name: 'Adam' },
+   { name: 'Addison' },
+   { name: 'Adrian' },
+   { name: 'Aiden' },
+   { name: 'Alex' },
+   { name: 'Alexa' },
+   { name: 'Alexander' },
+   { name: 'Alexandra' },
+   { name: 'Alexis' },
+   { name: 'Alice' },
+   { name: 'Allison' },
+   { name: 'Alyssa' },
+   { name: 'Amelia' },
+   { name: 'Andrew' },
+   { name: 'Anna' },
+   { name: 'Annabelle' },
+   { name: 'Anthony' },
+   { name: 'Aria' },
+   { name: 'Arianna' },
+   { name: 'Asher' },
+   { name: 'Aubrey' },
+   { name: 'Audrey' },
+   { name: 'Austin' },
+   { name: 'Ava' },
+   { name: 'Avery' },
+   { name: 'Bailey' },
+   { name: 'Bella' },
+   { name: 'Benjamin' },
+   { name: 'Bentley' },
+   { name: 'Blake' },
+   { name: 'Brandon' },
+   { name: 'Brayden' },
+   { name: 'Brianna' },
+   { name: 'Brody' },
+   { name: 'Brooke' },
+   { name: 'Brooklyn' },
+   { name: 'Caleb' },
+   { name: 'Cameron' },
+   { name: 'Caroline' },
+   { name: 'Carson' },
+   { name: 'Carter' },
+   { name: 'Charlie' },
+   { name: 'Charlotte' },
+   { name: 'Chase' },
+   { name: 'Chloe' },
+   { name: 'Christian' },
+   { name: 'Christopher' },
+   { name: 'Claire' },
+   { name: 'Clara' },
+   { name: 'Cole' },
+   { name: 'Colin' },
+   { name: 'Colton' },
+   { name: 'Connor' },
+   { name: 'Cooper' },
+   { name: 'Daniel' },
+   { name: 'David' },
+   { name: 'Declan' },
+   { name: 'Dominic' },
+   { name: 'Dylan' },
+   { name: 'Easton' },
+   { name: 'Eleanor' },
+   { name: 'Elena' },
+   { name: 'Eli' },
+   { name: 'Eliana' },
+   { name: 'Elijah' },
+   { name: 'Elise' },
+   { name: 'Elizabeth' },
+   { name: 'Ella' },
+   { name: 'Ellie' },
+   { name: 'Emily' },
+   { name: 'Emma' },
+   { name: 'Ethan' },
+   { name: 'Eva' },
+   { name: 'Evan' },
+   { name: 'Evelyn' },
+   { name: 'Gabriel' },
+   { name: 'Gabriella' },
+   { name: 'Gavin' },
+   { name: 'Gianna' },
+   { name: 'Grace' },
+   { name: 'Grayson' },
+   { name: 'Hailey' },
+   { name: 'Hannah' },
+   { name: 'Harper' },
+   { name: 'Harrison' },
+   { name: 'Hayden' },
+   { name: 'Henry' },
+   { name: 'Hudson' },
+   { name: 'Hunter' },
+   { name: 'Ian' },
+   { name: 'Isaac' },
+   { name: 'Isabella' },
+   { name: 'Isabelle' },
+   { name: 'Isaiah' },
+   { name: 'Isla' },
+   { name: 'Jace' },
+   { name: 'Jack' },
+   { name: 'Jackson' },
+   { name: 'Jacob' },
+   { name: 'Jake' },
+   { name: 'James' },
+   { name: 'Jasmine' },
+   { name: 'Jason' },
+   { name: 'Jayden' },
+   { name: 'Jeremiah' },
+   { name: 'John' },
+   { name: 'Jonathan' },
+   { name: 'Jordan' },
+   { name: 'Joseph' },
+   { name: 'Joshua' },
+   { name: 'Julia' },
+   { name: 'Julian' },
+   { name: 'Kaitlyn' },
+   { name: 'Kate' },
+   { name: 'Kayla' },
+   { name: 'Kaylee' },
+   { name: 'Kendall' },
+   { name: 'Kennedy' },
+   { name: 'Kylie' },
+   { name: 'Landon' },
+   { name: 'Lauren' },
+   { name: 'Layla' },
+   { name: 'Leah' },
+   { name: 'Leo' },
+   { name: 'Levi' },
+   { name: 'Liam' },
+   { name: 'Lillian' },
+   { name: 'Lily' },
+   { name: 'Lincoln' },
+   { name: 'Logan' },
+   { name: 'Lucas' },
+   { name: 'Lucy' },
+   { name: 'Luke' },
+   { name: 'Lyla' },
+   { name: 'Mackenzie' },
+   { name: 'Madelyn' },
+   { name: 'Madison' },
+   { name: 'Makayla' },
+   { name: 'Maria' },
+   { name: 'Mason' },
+   { name: 'Matthew' },
+   { name: 'Max' },
+   { name: 'Maya' },
+   { name: 'Mia' },
+   { name: 'Micah' },
+   { name: 'Michael' },
+   { name: 'Mila' },
+   { name: 'Miles' },
+   { name: 'Molly' },
+   { name: 'Morgan' },
+   { name: 'Natalie' },
+   { name: 'Nathan' },
+   { name: 'Nathaniel' },
+   { name: 'Nevaeh' },
+   { name: 'Nicholas' },
+   { name: 'Noah' },
+   { name: 'Nolan' },
+   { name: 'Nora' },
+   { name: 'Oliver' },
+   { name: 'Olivia' },
+   { name: 'Owen' },
+   { name: 'Paige' },
+   { name: 'Parker' },
+   { name: 'Peyton' },
+   { name: 'Piper' },
+   { name: 'Quinn' },
+   { name: 'Reagan' },
+   { name: 'Reese' },
+   { name: 'Riley' },
+   { name: 'Riley' },
+   { name: 'Ruby' },
+   { name: 'Ryan' },
+   { name: 'Ryder' },
+   { name: 'Sadie' },
+   { name: 'Samantha' },
+   { name: 'Samuel' },
+   { name: 'Sarah' },
+   { name: 'Savannah' },
+   { name: 'Scarlett' },
+   { name: 'Sean' },
+   { name: 'Sebastian' },
+   { name: 'Sienna' },
+   { name: 'Sophia' },
+   { name: 'Sophie' },
+   { name: 'Stella' },
+   { name: 'Sydney' },
+   { name: 'Taylor' },
+   { name: 'Thomas' },
+   { name: 'Tristan' },
+   { name: 'Tyler' },
+   { name: 'Victoria' },
+   { name: 'Violet' },
+   { name: 'William' },
+   { name: 'Wyatt' },
+   { name: 'Xavier' },
+   { name: 'Zachary' },
+   { name: 'Zoe' }
+];
+
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34780028-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

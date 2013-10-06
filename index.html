@@ -1,0 +1,1142 @@
+<!Doctype html>
+<html lang="en">
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>jQueryUI MultiSearch</title>
+   <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+
+   <script src="http://code.jquery.com/jquery.min.js"></script>
+   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+   <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.1.0/lodash.underscore.min.js"></script>
+   <script src="src/jqueryui-multisearch.js"></script>
+
+
+</head>
+<body>
+
+<style>
+.fixed-font {
+   font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+   font-size: 13px;
+}
+
+.list-unstyled {
+   padding-left: 10px;
+}
+
+input[data-role="input"] {
+   outline: none;
+   border: none;
+   font-size: 14px;
+   font-weight: normal;
+   line-height: 1.42857;
+   vertical-align: middle;
+   padding: 6px 12px;
+}
+
+a.list-group-item.hover {
+    background-color: #F5F5F5;
+    text-decoration: none;
+}
+
+a.label-info {
+   margin: 4px 3px;
+   font-size: 14px;
+}
+
+a.label-info.hover {
+   background-color: #31B0D5;
+}
+
+a.label-info.active {
+    background-color: #ADE0EE !important;
+}
+
+a.label-info .badge {
+   font-size: 9px;
+   padding: 1px 5px;
+}
+
+</style>
+
+<br/><br/>
+
+<div class="container">
+   <div class="row">
+      <div class="col-lg-3">
+      </div>
+
+      <div class="col-lg-6">
+
+
+         <h3>jQuery UI MultiSearch</h3>
+
+         <p>
+         A jQuery UI widget that enables building a list of multiple items using an autocomplete entry box
+         without imposing specific HTML structure or CSS style rules.
+         </p>
+
+         <p class="text-center">
+            <iframe src="http://ghbtns.com/github-btn.html?user=bseth99&repo=jquery-ui-multisearch&type=fork"
+              allowtransparency="true" frameborder="0" scrolling="0" width="53" height="20"></iframe>
+
+            &nbsp;
+
+            <iframe src="http://ghbtns.com/github-btn.html?user=bseth99&repo=jquery-ui-multisearch&type=watch"
+              allowtransparency="true" frameborder="0" scrolling="0" width="62" height="20"></iframe>
+
+            <iframe src="http://ghbtns.com/github-btn.html?user=bseth99&type=follow"
+              allowtransparency="true" frameborder="0" scrolling="0" width="132" height="20"></iframe>
+         </p>
+
+         <p class="text-center">
+            <a class="btn btn-primary" href="https://github.com/bseth99/jqueryui-multisearch/zipball/jqueryui-multisearch-0.0.1" >
+              Download Latest Version
+            </a>
+         </p>
+
+         <h3>Overview</h3>
+
+         <p>
+         The goal of this project is to create a widget that is an unopinionated about the structure and
+         styling of the content as possible.  There are so many variations of building a list of items by
+         looking each item up using a type ahead field but few will ever look the same.  However, the basic
+         underlying functionality is very similar.  This widget emphasizes building features that encapsulate
+         that control logic and providing many hooks along the way to customize the behavior.
+         </p>
+
+
+         <h3>Quick Demo</h3>
+
+         <p>
+         The source for this search is the top 200 baby names of 2012.
+         </p>
+
+         <div id="name-search">
+
+            <div class="row">
+               <div class="col-lg-12">
+                  <div class="panel panel-default">
+                     <div class="panel-body" data-role="selected-list">
+                        <input class="pull-left" data-role="input" type="text" placeholder="Search..."/>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div data-role="picker" class="panel panel-default">
+               <div class="list-group" data-role="picker-list">
+               </div>
+            </div>
+
+         </div>
+
+         <p>
+         Learn more about this demo <a href="examples/bootstrap.html">here</a>.
+         </p>
+
+         <h3>Features</h3>
+
+         <ul>
+            <li>Type ahead partial searching with suggested results against either a remote or local data source  </li>
+            <li>Built-in caching and throttling logic to help alleviate load on a remote data source </li>
+            <li>Result records can have any number of attributes which are passed through to template functions and triggered event handlers  </li>
+            <li>Multiple keys and search fields can be defined to enable duplicate detection, lookups, and hit highlighting </li>
+            <li>Keyboard interaction to navigate suggestion list and selected items </li>
+            <li>Many event hooks and callbacks to customize behavior and control layout and styling </li>
+            <li>API methods to get/set the list of selected items and add/remove individual items </li>
+         </ul>
+
+         <h3>Quick Start</h3>
+
+         <p>
+         MultiSearch has dependencies on jQuery, jQuery UI, and Underscore.  The LoDash compatible version can be used instead.
+         The widget makes extensive use of several of the data transversal and manipulation function in the Underscore library
+         which helps reduce the code size and maintenance (no reason to reinvent that wheel).  You can download these
+         or just use the CDN versions:
+         </p>
+
+         <pre>
+&lt;script src="http://code.jquery.com/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"&gt;&lt;/script&gt;
+&lt;script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.1.0/lodash.underscore.min.js"&gt;&lt;/script&gt;
+         </pre>
+
+
+         <p>
+         Next, include the MultiSearch file and you're ready to go:
+         </p>
+
+         <pre>
+&lt;script src="jqueryui-multisearch.min.js"&gt;&lt;/script&gt;
+         </pre>
+
+
+         <p>
+         Here's some example mark up that defines the container of the widget and the
+         four required points in that structure where the widget should attach certain
+         functionality:
+         </p>
+
+<pre>
+<code class="prettyprint">
+&lt;div id="myMultiSearch"&gt;
+   &lt;div data-role="selected-list"&gt;
+      &lt;input data-role="input" type="text" placeholder="Search..."/&gt;
+   &lt;/div&gt;
+
+   &lt;div data-role="picker" class="picker"&gt;
+      &lt;ul class="list-group" data-role="picker-list"&gt;
+      &lt;/ul&gt;
+   &lt;/div&gt;
+&lt;/div&gt;
+</code>
+</pre>
+
+
+         <p>
+         These roles can be placed anywhere inside the widget's containing element (although, you
+         may need to change a few options on the widget so it makes the right assuptions about where
+         a given item is located).
+         </p>
+
+
+         <p>
+         Once that is defined, you can target the containing element and initialize it with the
+         multisearch widget plugin.  The only required option is the <code>source</code> data which
+         can simply be an array of objects.  Everything else will default to provide basic functionality.
+         </p>
+
+<pre>
+<code class="prettyprint">
+$(function() {
+
+   $("#myMultiSearch").multisearch({
+      source: [
+         {name: 'One'},
+         {name: 'Two'},
+         {name: 'Three'},
+         {name: 'Four'}
+      ],
+   });
+
+});
+</code>
+</pre>
+
+         <p>
+         If you run the above code with no styling, it will work fine but there won't be any
+         highlighting and the selected items will run together.  With the HTML defined above,
+         these styles will make it look a little better:
+         </p>
+
+<pre>
+<code class="prettyprint">
+   ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+   }
+
+   li {
+      margin: 0;
+      padding: 0;
+   }
+
+   a {
+      color: black;
+      margin: 3px;
+   }
+
+   a:hover, a.hover, li.hover a {
+      color: green;
+   }
+
+   .picker {
+      border: 1px solid silver;
+      padding: 10px;
+   }
+</code>
+</pre>
+
+         <p>
+         The example is straight from the basic demo below.  Take a look at it for the full source and
+         to see it working (with and without the styling).
+         </p>
+
+         <h3>Demos</h3>
+
+         <ul>
+            <li><a href="examples/base.html">The Basics</a></li>
+            <li><a href="examples/bootstrap.html">Bootstrap Structure and Styling</a></li>
+            <li><a href="examples/position.html">Alternative Positioning</a></li>
+            <li><a href="examples/api.html">Using the API methods</a></li>
+            <li><a href="examples/movies.html">Backbone Models and More Data</a></li>
+         </ul>
+
+         <h3>Reference</h3>
+
+         <p>
+         The mark up needs to define several roles via a <code>data-role</code> attribute.  The widget
+         will use those binding points to attach the required control logic.  The list of roles include:
+         </p>
+
+         <ul>
+            <li><code>selected-list</code> - the containing element where selected items should be rendered</li>
+
+            <li><code>selected-item</code> - auto-assigned by the widget as new items are generated with the
+            factory template function defined by <code>formatSelectedItem</code>.  These elements will be direct children
+            of the <code>selected-list</code> element</li>
+
+            <li><code>input</code> - this should be the input box where the user will type searches.  Depending on where it
+            is positioned relative to selected-list, you may need to adjust the <code>pickerPosition</code> option so
+            keyboard interation works as expected</li>
+
+            <li><code>picker</code> - container for the picker list.  This will be the target of positioning and show/hide
+            methods as a search is performed</li>
+
+            <li><code>picker-list</code> - the containing element where search results should be rendered</li>
+
+            <li><code>picker-item</code> - auto-assigned by the widget as new items are generated with the
+            factory template function defined by <code>formatPickerItem</code>.  These elements will be direct children
+            of the <code>picker-list</code> element</li>
+
+         </ul>
+
+         <p>
+         The keyboard can be used to navigate both the picker items when a search is being performed and
+         the list of selected items when no text is in the input box.  The navigation will trigger the same
+         hover/active events that would occur if using the mouse.
+         </p>
+
+
+         <h4>Options</h4>
+
+         <p>
+         This is the list of available options when initializing the widget.  The only required option
+         is the <code>source</code> the widget will use for searching and the item content.
+         </p>
+
+         <p>
+         <code>source</code>: The data source to search.  Can be a string, function, or array of objects
+         </p>
+
+         <ul>
+
+           <li>A string should be a valid remote datasource</li>
+
+           <li>A function can implement a data search and should call the passed in
+               callback with the results:
+
+                 <p>
+                 &nbsp;&nbsp;&nbsp; <span class="text-primary fixed-font">function ( term, callback ) { ... }</span>
+                 </p>
+           </li>
+           <li>An array repesents a local dataset and all searches will be done locally
+               on the contents</li>
+
+         </ul>
+
+         <p>
+         Default: <span class="text-primary fixed-font">null</span>
+         </p>
+         <br/>
+
+         <p>
+         <code>ajaxOptions</code>:Hash of options that are used in the $.ajax call on a remote resource.
+         Only used when source is a string representing the path of the resource.
+         Currently accepts overrides for dataType and method options.  Also adds
+         a custom options:
+         </p>
+
+         <ul>
+            <li>
+              <strong>searchTerm</strong>: the parameter name that will contain the search term
+                          ( ie path/to/resource?term=abc )
+            </li>
+
+         </ul>
+
+         <p>
+         Default:
+         <span class="text-primary fixed-font">{ <br/>
+             &nbsp;&nbsp; searchTerm: 'term',  <br/>
+             &nbsp;&nbsp; dataType: 'json',  <br/>
+             &nbsp;&nbsp; method: 'GET' <br/>
+         }</span>
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>keyAttrs</code>: An array of fields in the result object which represent the unique key for the object.
+         Used to detect duplicate items.  If not set, will default to ['id']
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">[ 'id' ]</span>
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>searchAttrs</code>: An array of fields in the result object to search for the entered criteria.
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">[ 'name' ]</span>
+         </p>
+         <br/>
+
+
+         <p>
+         <code>formatPickerItem</code>: A function that returns an HTML string repesenting the item to add to the suggestion picker
+         as a search is entered into the input..  The hash returned by the remote server or local cache
+         is passed to the function.  This can be a Underscore template() function.
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">function( data ) { return '&lt;li&gt;&lt;a href="#"&gt;'+data.name+'&lt;/a&gt;&lt;/li&gt;'; }</span>
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>formatSelectedItem</code>: A function that returns an HTML string repesenting the item to add to the selected
+         items list.  Called each time a search term is selected from the suggestion picker or,
+         when not found items are allowed, a new entry is completed.  The hash from the result
+         set is passed to the function.  This can be a Underscore template() function.
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">function( data ) { return '&lt;a href="#"&gt;'+data.name+'&lt;/a&gt;'; }</span>
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>buildNewItem</code>: When adding items that are not found in the suggestion picker, this function is called
+         to define the object that is expected in the formatSelectedItem() template.  Generally,
+         you'll leave the keyAttrs attributes null and set the primary display field with the
+         text from the input box which is passed to the function.
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">function( text ) { return { id: null, name: text }; }</span>
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>minSearchChars</code>: How many characters need to be typed to trigger a search
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">2</span>
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>searchThrottle</code>: How quickly can successive searches be triggered.  The value is in milliseconds
+         and uses Underscore's throttle() function to control triggering calls to the
+         remote resource.  This does not affect local cache searching.
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">200</span>
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>maxShowOptions</code>: How many results to show in the picker.  Even if 200 are returned by the server, you
+         can control how many are actually displayed in the suggestion picker.  Set it to zero
+         to show everything.  Ensure you enable some kind of scrolling on the element you define
+         as the picker/picker-list role if you allow longer lists of items.
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">5</span>
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>minLocalCache</code>: When to start refining a search against the local cache.  Each remote search is saved by term
+         if the remote result set has less than minLocalCache items in it, each subsequent character typed
+         will use that result as a basis for searching.  This can reduce the number of hits on the remote
+         resource and can be fine-tuned to match your needs.  Set it to zero to disable local refinements
+         against the cache.  If you do use it, make sure any limits on the server side are set high enough
+         to ensure that a search term that refines the remote search below this threshold will contain all
+         possible items that could be found if the subsequent searches were run against the server.
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">50</span>
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>preventNotFound</code>: Can items not found in the suggestion picker be added to the seleced item list.  If allowed,
+         buildNewItem() will be called to allow setting defaults on the object that represents the
+         search data to be prefilled before calling formatSelectedItem().  The adding and added events
+         will have the notfound flag set to true when an item will be added that in not in the picker.
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">false</span>
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>preventDuplicates</code>: Using the keyAttrs, should duplicates be prevented.  A duplicate event is triggered if one is found
+         allowing custom UI logic to be defined externally.  Otherwise, nothing will happen.  The suggestion
+         picker will remain open and it will appear that the widget is not responding.  Items that are not
+         found in the picker but are added to the selected item list will not be considered a duplicate
+         unless you provide custom logic during adding that would assign a key.
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">true</span>
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>useAutoWidth</code>: Automatically resize the input box to match the text.  Helpful for inline/floating elements so
+         the input only wraps as needed.  Disable if using block elements that you want to fill the
+         parent space.
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">true</span>
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>pickerPosition</code>: Use jQueryUI.position plugin to position the picker box relative to the input control.  The default is the
+         basic drop-down menu box under the input entry box.  Depending on the structure, you may want to adjust this
+         setting.
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">{ my: 'left top', at: 'left bottom' }</span>
+         </p>
+         <br/>
+
+
+         <p>
+         <code>inputPosition</code>: Where is the input relative to the item list.  Determines how the keyboard navigation
+         moves through the items and where new items are added.  Valid values are "start" and "end"
+         defaults to "end".  Depending on where you position the input box, adjust this setting
+         so the UI interactions make sense.
+         </p>
+
+         <p>
+         Default: <span class="text-primary fixed-font">end</span>
+         </p>
+         <br/>
+
+
+         <p>
+         <code>localMatcher</code>:
+         </p>
+         <p>
+         For each field defined in searchAttrs, search for the input text using the function below.  This is used
+         for both local cache searches and hit highlighting.  It should match with the search method from the remote.
+         The default is to look for the search string anywhere in the target field.  If you want to match only from
+         the leading edge of the field, you'll need to override this function.  If you override it, the function
+         must accept two parameters and return true (needle found in haystack) or false (not found):
+         </p>
+
+         <p>
+         &nbsp;&nbsp;&nbsp; <span class="text-primary fixed-font">function( needle, haystack ) { ... }</span>
+         </p>
+
+
+         <h4>API</h4>
+
+         <p>
+         Several methods are available to interact with the selected items list via code.  These methods all suppress
+         any events that would normally be triggered by user interaction.
+         </p>
+
+         <p>
+         <code>value</code>: Getter/Setter for list of selected items.  Use it to retreive the list of items
+         entered by the user or seed the list with existing items (from a database, etc).
+         </p>
+
+         <p>
+         Getting the value returns a shallow clone of the objects in the item list.  If
+         you're using nested objects from a shared dataset, be aware you may be referencing
+         them in the returned set.
+         </p>
+
+         <p>
+         Setting the value will destory the current selections.  If you want more control,
+         use add/remove to selectively update the list.
+         </p>
+         <br/>
+
+
+
+         <p>
+         <code>add</code>: Add an item to the selection list.  Optional second arguement can be used to specify
+         the position to insert the item.  If the item already exists, it will be merged
+         and trigger rendering the content of the item again such that updated data can be
+         applied to the list.
+         </p>
+         <br/>
+
+         <p>
+         <code>remove</code>: Remove one or all items form the selected list:
+         </p>
+
+         <ul>
+            <li>No arguements will remove everything</li>
+            <li>Pass an Integer representing the ordinal index of the item to remove</li>
+            <li>Pass an Object containing the keys of the item to remove</li>
+         </ul>
+
+
+
+         <h4>Events</h4>
+
+         <p>
+         Uses the standard jQuery UI interface for triggering events.  You can either
+         define a callback in the options hash or listen to the event by binding to multisearch + event name
+         ie <code>$.on( 'multisearchadding', ... )</code>.
+         </p>
+
+
+         <p>
+         Handler function will receive an event and ui argument.  The ui object is defined below with each
+         event that is triggered.
+         </p>
+
+         <p>
+         <code>duplicate</code>: trigger when preventDuplicates is true and a selected item from the picker matches
+         an item already in the item list based on keyAttrs
+         </p>
+
+         <span class="fixed-font">
+         <ul class="list-unstyled">
+            <li>ui: {</li>
+            <li>
+               <ul class="list-unstyled">
+                 <li> <strong>existing</strong>:  Object representing the duplicate already present in the item list </li>
+                 <li> <strong>adding</strong>:  Object representing the item that is attempting to be added </li>
+               </ul>
+            </li>
+            <li>}</li>
+         </ul>
+         </span>
+         <br/>
+
+
+         <p>
+         <code>adding</code>: triggered before actually adding the item to the item list.  Return false to
+         prevent the the action.  You can modify data to affect what is passed to the
+         template function and retained in the item list.
+         </p>
+
+         <span class="fixed-font">
+         <ul class="list-unstyled">
+            <li>ui: {</li>
+            <li>
+               <ul class="list-unstyled">
+                 <li> <strong>data</strong>:  Object containing the selected item </li>
+                 <li> <strong>notfound</strong>:  Flag indicating whether the item was found in the picker list </li>
+               </ul>
+            </li>
+            <li>}</li>
+         </ul>
+         </span>
+         <br/>
+
+
+         <p>
+         <code>added</code>: once the item is added, this event is triggered with the data and element.
+         </p>
+
+         <span class="fixed-font">
+         <ul class="list-unstyled">
+            <li>ui: {</li>
+            <li>
+               <ul class="list-unstyled">
+                 <li> <strong>data</strong>:  Object containing the selected item </li>
+                 <li> <strong>element</strong>:  jQuery object of the newly added element representing the data in the UI </li>
+               </ul>
+            </li>
+            <li>}</li>
+         </ul>
+         </span>
+         <br/>
+
+
+
+         <p>
+         <code>removing</code>: prior to removing the item, this event is triggered to allow canceling
+         the operation by returning false.
+         </p>
+
+         <span class="fixed-font">
+         <ul class="list-unstyled">
+            <li>ui: {</li>
+            <li>
+               <ul class="list-unstyled">
+                 <li> <strong>data</strong>:  Object containing the selected item </li>
+               </ul>
+            </li>
+            <li>}</li>
+         </ul>
+         </span>
+         <br/>
+
+
+         <p>
+         <code>removed</code>: upon removing the item, this event is triggered
+         </p>
+
+         <span class="fixed-font">
+         <ul class="list-unstyled">
+            <li>ui: {</li>
+            <li>
+               <ul class="list-unstyled">
+                 <li> <strong>data</strong>:  Object containing the selected item </li>
+               </ul>
+            </li>
+            <li>}</li>
+         </ul>
+         </span>
+         <br/>
+
+
+         <p>
+         <code>searching</code>: triggered before searching but immediately after displaying the picker
+         </p>
+
+         <span class="fixed-font">
+         <ul class="list-unstyled">
+            <li>ui: {</li>
+            <li>
+               <ul class="list-unstyled">
+                 <li> <strong>term</strong>:  String that will be used in the search </li>
+                 <li> <strong>picker</strong>:  jQuery object representing the main picker container element </li>
+               </ul>
+            </li>
+            <li>}</li>
+         </ul>
+         </span>
+         <br/>
+
+
+
+         <p>
+         <code>searched</code>: triggered after searching has completed and results have been returned by the source
+         </p>
+
+         <span class="fixed-font">
+         <ul class="list-unstyled">
+            <li>ui: {</li>
+            <li>
+               <ul class="list-unstyled">
+                 <li> <strong>term</strong>:  String that will be used in the search </li>
+                 <li> <strong>picker</strong>:  jQuery object representing the main picker container element </li>
+                 <li> <strong>list</strong>:  Array of objects returned by the search </li>
+               </ul>
+            </li>
+            <li>}</li>
+         </ul>
+         </span>
+         <br/>
+
+
+
+         <p>
+         <code>itemaction</code>: triggered when an element with <code>data-action</code> is clicked in the item list
+         </p>
+
+         <span class="fixed-font">
+         <ul class="list-unstyled">
+            <li>ui: {</li>
+            <li>
+               <ul class="list-unstyled">
+                 <li> <strong>data</strong>:  Object containing the selected item </li>
+                 <li> <strong>element</strong>:  jQuery object of the element representing the data in the UI </li>
+               </ul>
+            </li>
+            <li>}</li>
+         </ul>
+         </span>
+         <br/>
+
+
+
+         <p>
+         <code>itemselect</code>: triggered when an item is clicked in the item list (no <code>data-action</code> defined)
+         </p>
+
+         <span class="fixed-font">
+         <ul class="list-unstyled">
+            <li>ui: {</li>
+            <li>
+               <ul class="list-unstyled">
+                 <li> <strong>data</strong>:  Object containing the selected item </li>
+                 <li> <strong>element</strong>:  jQuery object of the element representing the data in the UI </li>
+               </ul>
+            </li>
+            <li>}</li>
+         </ul>
+         </span>
+         <br/>
+
+
+
+         <p>
+         Hover/Active events are triggered either when the user uses the mouse (hover/click) or
+         uses the keyboard to navigate (arrows, space bar).  A handler can return false to prevent
+         the default action which simply changes classes on the elements.  Each event provides the
+         following ui object:
+         </p>
+
+         <span class="fixed-font">
+         <ul class="list-unstyled">
+            <li>ui: {</li>
+            <li>
+               <ul class="list-unstyled">
+                 <li> <strong>target</strong>:  A jQuery object representing the item receiving the event </li>
+                 <li> <strong>siblings</strong>:
+                          jQuery object of the siblings of the target filtering out any elements that
+                          do not have the data-role defined.  Generally, you need to remove classes from
+                          the siblings when adding them to the target.
+                 </li>
+               </ul>
+            </li>
+            <li>}</li>
+         </ul>
+         </span>
+
+         <p>
+         Here is the list of interaction events:
+         </p>
+
+         <ul>
+            <li><code>selectedactive</code>:  When a selected item is clicked or selected with the space bar </li>
+            <li><code>selectedhoverin</code>:  When mousing into an item or using the arrows to navigate </li>
+            <li><code>selectedhoverout</code>:  When leaving a selected item </li>
+            <li><code>pickerhoverin</code>: When mouseover or arrows to a suggested item in the picker list </li>
+            <li><code>pickerhoverout</code>: When leaving the item </li>
+         </ul>
+
+         <h3>Ideas, Issues, and Requests</h3>
+
+         <p>
+         Please open a ticket via the issue log on the GitHub project page:
+         </p>
+         <p>
+         <a href="https://github.com/bseth99/jqueryui-multisearch/issues">
+         https://github.com/bseth99/jqueryui-multisearch/issues
+         </a>
+         </p>
+
+         <h3>License</h3>
+
+         <p>
+         Copyright (c) 2013 Ben Olson
+         </p>
+         <p>
+         Licensed under the MIT License
+         </p>
+
+
+         <br/><br/>
+
+      </div>
+
+      <div class="col-lg-3">
+      </div>
+   </div>
+</div>
+
+<script id="picker-item" type="text/template">
+   <a href="#" class="list-group-item"><%= name %></a>
+</script>
+
+<script id="selected-item" type="text/template">
+   <a href="#" class="label label-info pull-left"><%= name %>
+      <% if ( times > 1 ) { %>
+         <span class="badge"><%= times %></span>
+      <% } %>
+   </a>
+</script>
+
+
+<script>
+
+$(function() {
+
+   $("#name-search").multisearch({
+      source: babyNames,
+      keyAttrs: ['name'],
+
+      formatPickerItem: _.template( $('#picker-item').html() ),
+      formatSelectedItem: _.template( $('#selected-item').html() ),
+
+      adding: function( event, ui ) {
+         if ( !ui.data.times )
+            ui.data.times = 0;
+
+         ui.data.times++;
+      },
+
+      duplicate: function( event, ui ) {
+         ui.existing.times++;
+         $('#name-search').multisearch( 'add', ui.existing );
+      },
+   });
+
+});
+
+var babyNames = [
+   { name: 'Aaliyah' },
+   { name: 'Aaron' },
+   { name: 'Abigail' },
+   { name: 'Adam' },
+   { name: 'Addison' },
+   { name: 'Adrian' },
+   { name: 'Aiden' },
+   { name: 'Alex' },
+   { name: 'Alexa' },
+   { name: 'Alexander' },
+   { name: 'Alexandra' },
+   { name: 'Alexis' },
+   { name: 'Alice' },
+   { name: 'Allison' },
+   { name: 'Alyssa' },
+   { name: 'Amelia' },
+   { name: 'Andrew' },
+   { name: 'Anna' },
+   { name: 'Annabelle' },
+   { name: 'Anthony' },
+   { name: 'Aria' },
+   { name: 'Arianna' },
+   { name: 'Asher' },
+   { name: 'Aubrey' },
+   { name: 'Audrey' },
+   { name: 'Austin' },
+   { name: 'Ava' },
+   { name: 'Avery' },
+   { name: 'Bailey' },
+   { name: 'Bella' },
+   { name: 'Benjamin' },
+   { name: 'Bentley' },
+   { name: 'Blake' },
+   { name: 'Brandon' },
+   { name: 'Brayden' },
+   { name: 'Brianna' },
+   { name: 'Brody' },
+   { name: 'Brooke' },
+   { name: 'Brooklyn' },
+   { name: 'Caleb' },
+   { name: 'Cameron' },
+   { name: 'Caroline' },
+   { name: 'Carson' },
+   { name: 'Carter' },
+   { name: 'Charlie' },
+   { name: 'Charlotte' },
+   { name: 'Chase' },
+   { name: 'Chloe' },
+   { name: 'Christian' },
+   { name: 'Christopher' },
+   { name: 'Claire' },
+   { name: 'Clara' },
+   { name: 'Cole' },
+   { name: 'Colin' },
+   { name: 'Colton' },
+   { name: 'Connor' },
+   { name: 'Cooper' },
+   { name: 'Daniel' },
+   { name: 'David' },
+   { name: 'Declan' },
+   { name: 'Dominic' },
+   { name: 'Dylan' },
+   { name: 'Easton' },
+   { name: 'Eleanor' },
+   { name: 'Elena' },
+   { name: 'Eli' },
+   { name: 'Eliana' },
+   { name: 'Elijah' },
+   { name: 'Elise' },
+   { name: 'Elizabeth' },
+   { name: 'Ella' },
+   { name: 'Ellie' },
+   { name: 'Emily' },
+   { name: 'Emma' },
+   { name: 'Ethan' },
+   { name: 'Eva' },
+   { name: 'Evan' },
+   { name: 'Evelyn' },
+   { name: 'Gabriel' },
+   { name: 'Gabriella' },
+   { name: 'Gavin' },
+   { name: 'Gianna' },
+   { name: 'Grace' },
+   { name: 'Grayson' },
+   { name: 'Hailey' },
+   { name: 'Hannah' },
+   { name: 'Harper' },
+   { name: 'Harrison' },
+   { name: 'Hayden' },
+   { name: 'Henry' },
+   { name: 'Hudson' },
+   { name: 'Hunter' },
+   { name: 'Ian' },
+   { name: 'Isaac' },
+   { name: 'Isabella' },
+   { name: 'Isabelle' },
+   { name: 'Isaiah' },
+   { name: 'Isla' },
+   { name: 'Jace' },
+   { name: 'Jack' },
+   { name: 'Jackson' },
+   { name: 'Jacob' },
+   { name: 'Jake' },
+   { name: 'James' },
+   { name: 'Jasmine' },
+   { name: 'Jason' },
+   { name: 'Jayden' },
+   { name: 'Jeremiah' },
+   { name: 'John' },
+   { name: 'Jonathan' },
+   { name: 'Jordan' },
+   { name: 'Joseph' },
+   { name: 'Joshua' },
+   { name: 'Julia' },
+   { name: 'Julian' },
+   { name: 'Kaitlyn' },
+   { name: 'Kate' },
+   { name: 'Kayla' },
+   { name: 'Kaylee' },
+   { name: 'Kendall' },
+   { name: 'Kennedy' },
+   { name: 'Kylie' },
+   { name: 'Landon' },
+   { name: 'Lauren' },
+   { name: 'Layla' },
+   { name: 'Leah' },
+   { name: 'Leo' },
+   { name: 'Levi' },
+   { name: 'Liam' },
+   { name: 'Lillian' },
+   { name: 'Lily' },
+   { name: 'Lincoln' },
+   { name: 'Logan' },
+   { name: 'Lucas' },
+   { name: 'Lucy' },
+   { name: 'Luke' },
+   { name: 'Lyla' },
+   { name: 'Mackenzie' },
+   { name: 'Madelyn' },
+   { name: 'Madison' },
+   { name: 'Makayla' },
+   { name: 'Maria' },
+   { name: 'Mason' },
+   { name: 'Matthew' },
+   { name: 'Max' },
+   { name: 'Maya' },
+   { name: 'Mia' },
+   { name: 'Micah' },
+   { name: 'Michael' },
+   { name: 'Mila' },
+   { name: 'Miles' },
+   { name: 'Molly' },
+   { name: 'Morgan' },
+   { name: 'Natalie' },
+   { name: 'Nathan' },
+   { name: 'Nathaniel' },
+   { name: 'Nevaeh' },
+   { name: 'Nicholas' },
+   { name: 'Noah' },
+   { name: 'Nolan' },
+   { name: 'Nora' },
+   { name: 'Oliver' },
+   { name: 'Olivia' },
+   { name: 'Owen' },
+   { name: 'Paige' },
+   { name: 'Parker' },
+   { name: 'Peyton' },
+   { name: 'Piper' },
+   { name: 'Quinn' },
+   { name: 'Reagan' },
+   { name: 'Reese' },
+   { name: 'Riley' },
+   { name: 'Riley' },
+   { name: 'Ruby' },
+   { name: 'Ryan' },
+   { name: 'Ryder' },
+   { name: 'Sadie' },
+   { name: 'Samantha' },
+   { name: 'Samuel' },
+   { name: 'Sarah' },
+   { name: 'Savannah' },
+   { name: 'Scarlett' },
+   { name: 'Sean' },
+   { name: 'Sebastian' },
+   { name: 'Sienna' },
+   { name: 'Sophia' },
+   { name: 'Sophie' },
+   { name: 'Stella' },
+   { name: 'Sydney' },
+   { name: 'Taylor' },
+   { name: 'Thomas' },
+   { name: 'Tristan' },
+   { name: 'Tyler' },
+   { name: 'Victoria' },
+   { name: 'Violet' },
+   { name: 'William' },
+   { name: 'Wyatt' },
+   { name: 'Xavier' },
+   { name: 'Zachary' },
+   { name: 'Zoe' }
+];
+
+</script>
+
+
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?autoload=false"></script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34780028-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</body>
+</html>
