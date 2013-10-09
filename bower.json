@@ -1,6 +1,6 @@
 {
   "name": "jquery-ui-multisearch",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "ignore": [
     "bower_components",
     "node_modules",
