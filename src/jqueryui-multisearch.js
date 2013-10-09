@@ -424,18 +424,19 @@
          this.localCache = {};
          this.optionData = [];
          this.itemData = [];
+         this.search_text = '';
 
          this.element.addClass( 'osb-multisearch' );
 
-         this.$input = this.element.find( '[data-role="input"]' ).attr({ 'autocomplete': 'off',  'autocapitalize': 'off' });
+         this.$input = this.element.find( '[data-role="input"]' ).attr({ 'autocomplete': 'off',  'autocapitalize': 'off', 'spellcheck': 'false'  });
          this.$picker = this.element.find( '[data-role="picker"]' ).css( 'position', 'absolute' ).hide();
          this.$pickerList = this.element.find( '[data-role="picker-list"]' );
          this.$itemList = this.element.find( '[data-role="selected-list"]' );
 
-         this.$input.on( 'keydown', $.proxy( this, '_processInput' ) );
+         this.$input.on( 'keydown.multisearch', $.proxy( this, '_processInput' ) );
 
-         this.$picker.on( 'click mouseenter mouseleave', '[data-role="picker-item"]', $.proxy( this, '_processPicker' ) );
-         this.$itemList.on( 'click mouseenter mouseleave keydown', '[data-role="selected-item"]', $.proxy( this, '_processSelected' ) );
+         this.$picker.on( 'click.multisearch mouseenter.multisearch mouseleave.multisearch', '[data-role="picker-item"]', $.proxy( this, '_processPicker' ) );
+         this.$itemList.on( 'click.multisearch mouseenter.multisearch mouseleave keydown.multisearch', '[data-role="selected-item"]', $.proxy( this, '_processSelected' ) );
 
          this._initAutoWidth();
          this._initRemote();
@@ -557,10 +558,10 @@
 
          this.element.removeClass( 'osb-multisearch' );
 
-         $( document ).off( 'click.multisearch' );
-         this.$input.off( 'keydown keyup' );
-         this.$picker.off( 'click mouseenter mouseleave' );
-         this.$itemList.off( 'click mouseenter mouseleave keydown' );
+         $( document ).off( '.multisearch' );
+         this.$input.off( '.multisearch' );
+         this.$picker.off( '.multisearch' );
+         this.$itemList.off( '.multisearch' );
 
          this.$sizer.remove();
          this.$pickerList.html('');
@@ -754,8 +755,12 @@
                            var e = jQuery.Event( 'keydown' );
                            e.keyCode = jQuery.ui.keyCode.DELETE;
                            $currentTarget.trigger( e );
-                           break;
+
+                           event.stopPropagation();
+                           event.preventDefault();
+                           return false;
                      }
+
                   }
                } else {
                   this._trigger( 'itemselect', null, { data: this.itemData[this.itemIndex], element: $currentTarget } )
