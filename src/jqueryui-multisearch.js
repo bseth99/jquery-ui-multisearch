@@ -1002,7 +1002,7 @@
 
             this._showPicker();
 
-            if ( this.options.preventNotFound ) {
+            if ( this.options.preventNotFound || this.optionData.length == 1 ) {
                this.optionIndex = 0;
                this._overPickerItem( this._getPickerChildren().eq( 0 ) );
             }
