@@ -543,13 +543,10 @@
                   whiteSpace: 'nowrap'
                 }).insertAfter( this.$input );
 
-            this.maxInputWidth = this.$sizer.width();
-            this.$sizer.css( 'width', 'auto' );
-
+            // The first call will initialize the rest since we need to be sure
+            // the elements are in the DOM.
             this.$input.on( 'keyup', $.proxy( this, '_autoSizeInput' ) );
 
-            this._autoSizeInput();
-            this.minInputWidth = this.$input.width();
          }
 
       },
@@ -1005,7 +1002,7 @@
 
             this._showPicker();
 
-            if ( this.options.preventNotFound ) {
+            if ( this.options.preventNotFound || this.optionData.length == 1 ) {
                this.optionIndex = 0;
                this._overPickerItem( this._getPickerChildren().eq( 0 ) );
             }
@@ -1128,11 +1125,21 @@
 
       _autoSizeInput: function() {
 
-           var text = this.$input.val(),
-               max = this.maxInputWidth;
+         var text = this.$input.val(),
+             max = this.maxInputWidth;
 
-           this.$sizer.html( (regexp_escape( text ) || regexp_escape( this.$input.attr( 'placeholder' ) ) || 'MMMMMMMMMMMMMMMM').replace(/ /g, '&nbsp;') );
-           this.$input.css({ width: Math.min( 100, Math.ceil( ( Math.max( this.minInputWidth, this.$sizer.outerWidth( true ) + 25 ) ) / max * 100 ) )+'%' });
+         // First time through, make some min/max calcs
+         // TODO: What if the element resizes, how to reset?
+         if ( !this.maxInputWidth ) {
+            this.maxInputWidth = this.$sizer.width();
+            this.$sizer.css( 'width', 'auto' );
+         }
+
+         this.$sizer.html( (regexp_escape( text ) || regexp_escape( this.$input.attr( 'placeholder' ) ) || 'MMMMMMMMMMMMMMMM').replace(/ /g, '&nbsp;') );
+         this.$input.css({ width: Math.min( 100, Math.ceil( ( Math.max( this.minInputWidth, this.$sizer.outerWidth( true ) + 25 ) ) / max * 100 ) )+'%' });
+
+         if ( !this.minInputWidth )
+            this.minInputWidth = this.$input.width();
       }
 
    });
