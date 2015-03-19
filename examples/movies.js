@@ -66,7 +66,7 @@
          model: MovieModel,
 
          urlRoot: 'http://api.rottentomatoes.com/api/public/v1.0/',
-         apikey: 'xc8w3a2sbj7b7mgrv9e75c52', /* please change to use your key */
+         apikey: 'vnk7x7s5jn4jvj5jysd3xnnt', /* please change to use your key */
          listSrc: 'box_office',
          searchTerm: '',
 
