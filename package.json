@@ -2,7 +2,7 @@
    "name": "jquery-ui-multisearch",
    "title": "jQuery UI MultiSearch",
    "description": "A jQuery UI widget that enables building a list of multiple items using an autocomplete entry box without imposing specific HTML structure or CSS style rules.",
-   "version": "0.0.3",
+   "version": "0.0.4",
    "author": {
       "name": "Ben Olson",
       "url": "http://bseth99.github.com/jquery-ui-multisearch"
