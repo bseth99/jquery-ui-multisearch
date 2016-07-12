@@ -686,6 +686,7 @@
              case jQuery.ui.keyCode.ESCAPE:
 
                this._hidePicker();
+               this.optionIndex = -1;
                return true;
 
              default:
