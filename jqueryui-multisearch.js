@@ -673,7 +673,7 @@
 
                if ( this.search_text.length > 0) {
 
-                  if( this.optionIndex > -1)// && !this.options.ignoreAutocomplete) {
+                  if( this.optionIndex > -1 && !this.options.ignoreAutocomplete) {
                      this._addSelectedItem();
                   } else {
 
