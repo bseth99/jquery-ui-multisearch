@@ -200,6 +200,13 @@
          *  so the UI interactions make sense.
          */
          inputPosition: 'end',
+         
+         /*
+         *  This will force the user to manually have to choose an item from the dropdown list. Reason being is if there is 
+         *  1 result that matches your query, it will always autocorrect the first result in the list instead of allowing you
+         *  to add a new one with the current input
+         */
+         ignoreAutocomplete: false,
 
          /*
          *  For each field defined in searchAttrs, search for the input text using the function below.  This is used
@@ -664,9 +671,9 @@
              case jQuery.ui.keyCode.TAB:
              case jQuery.ui.keyCode.ENTER:
 
-               if ( this.search_text.length > 0 ) {
+               if ( this.search_text.length > 0) {
 
-                  if( this.optionIndex > -1 ) {
+                  if( this.optionIndex > -1 && !this.options.ignoreAutocomplete) {
                      this._addSelectedItem();
                   } else {
 
