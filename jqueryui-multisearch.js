@@ -437,6 +437,7 @@
 
          this.$input = this.element.find( '[data-role="input"]' ).attr({ 'autocomplete': 'off',  'autocapitalize': 'off', 'spellcheck': 'false'  });
          this.$picker = this.element.find( '[data-role="picker"]' ).css( 'position', 'absolute' ).hide();
+         this.pickerVisible = false;
          this.$pickerList = this.element.find( '[data-role="picker-list"]' );
          this.$itemList = this.element.find( '[data-role="selected-list"]' );
 
@@ -571,6 +572,7 @@
          this.$pickerList.html('');
          this._getSelectedChildren().remove();
          this.$picker.show();
+         this.pickerVisible = true;
 
          this._remoteSearch = null;
 
@@ -673,7 +675,7 @@
 
                if ( this.search_text.length > 0) {
 
-                  if( this.optionIndex > -1 && !this.options.ignoreAutocomplete) {
+                  if( this.optionIndex > -1 && !this.options.ignoreAutocomplete && this.pickerVisible) {
                      this._addSelectedItem();
                   } else {
 
@@ -1025,6 +1027,7 @@
       _showPicker: function() {
 
          this.$picker.show();
+         this.pickerVisible = true;
 
          this.$picker.position({
             my: this.options.pickerPosition.my,
@@ -1036,6 +1039,7 @@
 
       _hidePicker: function() {
          this.$picker.hide();
+         this.pickerVisible = false;
       },
 
       _getPickerChildren: function() {
